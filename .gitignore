@@ -1,5 +1,7 @@
 # sit
 src/sit
+bin/
+*.swp
 
 # Compiled Object files
 *.slo
