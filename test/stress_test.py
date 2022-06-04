@@ -9,7 +9,7 @@ import tempfile
 def main():
     TMPROOT = r'/Volumes/RAM Disk'
     REPO = r"/Volumes/RAM Disk/redis/"
-    SIT_BIN = r"/Users/abcdabcd987/Developer/sit/bin/sit"
+    SIT_BIN = r"/Users/dgodfrey/Developer/sit/bin/sit"
     report = open('stress_test_%s.csv' % datetime.datetime.today().strftime('%Y%m%d_%H%M%S'), 'w')
     report.write('git_cur, sit_cur, git_tot, sit_tot, git_commit_cur, sit_commit_cur, git_commit_tot, sit_commit_tot, git_add_cur, sit_add_cur, git_add_tot, sit_add_tot\n')
 
@@ -39,7 +39,7 @@ def main():
 
     # write author config
     with open(os.path.join(tmp_sit, '.sit', 'config'), 'w') as f:
-        f.write("user.name: Lequn Chen\nuser.email: i@abcdabcd987.com\n")
+        f.write("user.name: David Godfrey\nuser.email: david.godfrey99@gmail.com\n")
 
     timeused_sit = 0
     timeused_git = 0
