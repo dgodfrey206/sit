@@ -3,6 +3,7 @@ src/sit
 bin/
 *.swp
 src/sit
+test/*.csv
 
 # Compiled Object files
 *.slo
