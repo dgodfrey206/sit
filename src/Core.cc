@@ -81,13 +81,10 @@ std::string addFile(const boost::filesystem::path &file)
 		}
 		std::string sha1Value = FileSystem::FileSHA1(file);
 		boost::filesystem::path dstFile(FileSystem::REPO_ROOT / FileSystem::OBJECTS_DIR / sha1Value.substr(0, 2) / sha1Value.substr(2));
-<<<<<<< HEAD
 		FileSystem::CompressCopy(file, dstFile);
 		std::cout << file << " added." << std::endl;
-=======
 		FileSystem::SafeCopyFile(file, dstFile);
 		//std::cout << file << " added." << std::endl;
->>>>>>> c06e9fb... fix a bug when checkout EMPTY_REF & reset EMPTY_REF
 		return sha1Value;
 	} catch (const boost::filesystem::filesystem_error &fe) {
 		std::cerr << fe.what() << std::endl;
@@ -99,15 +96,18 @@ std::string addFile(const boost::filesystem::path &file)
 
 void Add(const boost::filesystem::path &path)
 {
+	auto rmCount = Index::index.Remove(FileSystem::GetRelativePath(path));
+	if (!FileSystem::IsExist(path) && rmCount > 0) {
+		return;
+	} else if (!FileSystem::IsExist(path) && rmCount == 0) {
+		throw Util::SitException("Fatal: No such a record.");
+	}
 	auto fileList = FileSystem::ListRecursive(path, true, false);
 	for (const auto &file : fileList) {
 		if (FileSystem::IsDirectory(file)) {
 			continue;
 		}
 		boost::filesystem::path relativePath = FileSystem::GetRelativePath(file);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 		std::time_t curFileTime = boost::filesystem::last_write_time(file);
 		std::time_t existedFileTime = 0;
 		if (Index::index.GetIndex().count(relativePath) > 0) {
@@ -117,9 +117,7 @@ void Add(const boost::filesystem::path &path)
 			//std::cout << file << " is same as it in index." << std::endl;
 			continue;
 		}
->>>>>>> c06e9fb... fix a bug when checkout EMPTY_REF & reset EMPTY_REF
-=======
->>>>>>> 1425147... remove last_write_time correctly from Sit::Core::Add
+		auto relativePath = FileSystem::GetRelativePath(file);
 		Index::index.Insert(relativePath, addFile(file));
 	}
 
@@ -228,16 +226,17 @@ void Status()
 void Checkout(std::string commitid, std::string filename)
 {
 	commitid = Util::SHA1Complete(commitid);
-	if (!commitid.empty() && !Objects::IsExist(commitid)) {
-		std::cerr << "Error: Commit " << commitid << " doesn't exist." << std::endl;
-		return;
-	}
 	if (commitid == "master") {
 		commitid = Refs::Get(Refs::Local("master"));
 	} else if (commitid == "HEAD") {
 		commitid = Refs::Get("HEAD");
 	} else if (commitid == "index") {
 		commitid = "";
+	} else {
+		if (!commitid.empty() && !Objects::IsExist(commitid)) {
+			std::cerr << "Error: Commit " << commitid << " doesn't exist." << std::endl;
+			return;
+		}
 	}
 	if (!filename.empty()) {
 		filename = FileSystem::GetRelativePath(filename).generic_string();
