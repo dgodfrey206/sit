@@ -2,6 +2,7 @@
 src/sit
 bin/
 *.swp
+src/sit
 
 # Compiled Object files
 *.slo
