@@ -106,6 +106,7 @@ void Add(const boost::filesystem::path &path)
 		}
 		boost::filesystem::path relativePath = FileSystem::GetRelativePath(file);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 		std::time_t curFileTime = boost::filesystem::last_write_time(file);
 		std::time_t existedFileTime = 0;
@@ -117,6 +118,8 @@ void Add(const boost::filesystem::path &path)
 			continue;
 		}
 >>>>>>> c06e9fb... fix a bug when checkout EMPTY_REF & reset EMPTY_REF
+=======
+>>>>>>> 1425147... remove last_write_time correctly from Sit::Core::Add
 		Index::index.Insert(relativePath, addFile(file));
 	}
 
