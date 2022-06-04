@@ -191,11 +191,11 @@ void Commit(const std::string &msg, const bool isAmend)
 	}
 	const std::string user_name = Config::Get("user.name");
 	if (user_name == Config::NOT_FOUND) {
-		throw SitException("Config `user.name` not found.", "config: user.name");
+		throw SitException("`user.name` not found in configuration file.\n`sit config user.name <your name>` may help.", "config: user.name");
 	}
 	const std::string user_email = Config::Get("user.email");
 	if (user_email == Config::NOT_FOUND) {
-		throw SitException("Config `user.email` not found.", "config: user.email");
+		throw SitException("`user.email` not found in configuration file.\n`sit config user.email <your email>` may help.", "config: user.email");
 	}
 
 	const std::string datetime(to_simple_string(second_clock::local_time()));
@@ -466,10 +466,7 @@ void Diff(const std::string &baseID, const std::string &targetID, const std::vec
 	}
 	for (const auto &file : AllFile) {
 		const auto &item = diff.at(file);
-		std::cout << "Diffing at " << file << std::endl;
-		if (item.status == Diff::Same) {
-			std::cout << "  No difference between two version" << std::endl;
-		} else {
+		if (item.status != Diff::Same) {
 			Diff::DiffObject(std::cout, item, baseID, targetID);
 		}
 	}
