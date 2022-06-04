@@ -4,6 +4,7 @@ bin/
 *.swp
 src/sit
 test/*.csv
+*.dSYM/
 
 # Compiled Object files
 *.slo
