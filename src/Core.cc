@@ -81,8 +81,13 @@ std::string addFile(const boost::filesystem::path &file)
 		}
 		std::string sha1Value = FileSystem::FileSHA1(file);
 		boost::filesystem::path dstFile(FileSystem::REPO_ROOT / FileSystem::OBJECTS_DIR / sha1Value.substr(0, 2) / sha1Value.substr(2));
+<<<<<<< HEAD
 		FileSystem::CompressCopy(file, dstFile);
 		std::cout << file << " added." << std::endl;
+=======
+		FileSystem::SafeCopyFile(file, dstFile);
+		//std::cout << file << " added." << std::endl;
+>>>>>>> c06e9fb... fix a bug when checkout EMPTY_REF & reset EMPTY_REF
 		return sha1Value;
 	} catch (const boost::filesystem::filesystem_error &fe) {
 		std::cerr << fe.what() << std::endl;
@@ -100,6 +105,18 @@ void Add(const boost::filesystem::path &path)
 			continue;
 		}
 		boost::filesystem::path relativePath = FileSystem::GetRelativePath(file);
+<<<<<<< HEAD
+=======
+		std::time_t curFileTime = boost::filesystem::last_write_time(file);
+		std::time_t existedFileTime = 0;
+		if (Index::index.GetIndex().count(relativePath) > 0) {
+			existedFileTime = boost::filesystem::last_write_time(Objects::GetPath(Index::index.GetID(relativePath)));
+		}
+		if (curFileTime == existedFileTime) {
+			//std::cout << file << " is same as it in index." << std::endl;
+			continue;
+		}
+>>>>>>> c06e9fb... fix a bug when checkout EMPTY_REF & reset EMPTY_REF
 		Index::index.Insert(relativePath, addFile(file));
 	}
 
@@ -156,7 +173,7 @@ void Commit(const std::string &msg, const bool isAmend)
 
 	const std::string headref(Refs::Get("HEAD"));
 	const std::string masterref(Refs::Get(Refs::Local("master")));
-
+	
 	Objects::Commit commit;
 
 	if (headref != masterref && !isAmend) {
@@ -400,7 +417,11 @@ void Reset(std::ostream &stream, std::string id, const bool isHard)
 		} else if (anyfile.second == -1) {
 			inCommit = false, inIndex = true;
 		}
-		resetSingleFile(stream, anyfile.first, commitIndex.GetID(anyfile.first), inCommit, inIndex, isHard);
+		if (inCommit) {
+			resetSingleFile(stream, anyfile.first, commitIndex.GetID(anyfile.first), inCommit, inIndex, isHard);
+		} else {
+			resetSingleFile(stream, anyfile.first, Refs::EMPTY_REF, inCommit, inIndex, isHard);
+		}
 	}
 	Refs::Set(Refs::Local("master"), id);
 }
