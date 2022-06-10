@@ -27,3 +27,5 @@ HashValue MurmurHash3 ( const void * key, int len, uint32_t seed = 42 );
 //-----------------------------------------------------------------------------
 
 #endif // _MURMURHASH3_H_
+
+

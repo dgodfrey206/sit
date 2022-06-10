@@ -136,6 +136,8 @@ HashValue MurmurHash3 ( const void * key, const int len, uint32_t seed )
         h4 = ROTL32(h4,13); h4 += h1; h4 = h4*5+0x32ac3b17;
     }
 
+
+
     //----------
     // tail
 
