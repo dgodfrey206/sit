@@ -2,7 +2,7 @@
 
 namespace Sit{
 namespace Color{
-
+#ifdef _WIN32
 const ColorType RESET       ("\033[0m",     7);
 const ColorType CLS         ("\033[2J",     -1);   // Clears screen
 const ColorType BLACK       ("\033[22;30m", 0);    // Black
@@ -21,6 +21,6 @@ const ColorType LIGHTBLUE   ("\033[01;34m", 9);    // Light blue
 const ColorType LIGHTMAGENTA("\033[01;35m", 13);   // Light magenta / light purple
 const ColorType LIGHTCYAN   ("\033[01;36m", 11);   // Light cyan
 const ColorType WHITE       ("\033[01;37m", 15);   // White (bright)
-
+#endif
 }
 }

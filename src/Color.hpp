@@ -11,7 +11,7 @@
 namespace Sit {
 namespace Color {
 
-#ifdef WIN32
+#ifdef _WIN32
 const std::string RESET = "";
 const std::string CLS = "";              // Clears screen
 const std::string BLACK = "";        // Black
@@ -76,6 +76,7 @@ inline std::ostream& operator<<(std::ostream &out, const ColorType& c) {
 	return out;
 }
 
+#ifdef _WIN32
 extern const ColorType RESET       ;
 extern const ColorType CLS         ; // Clears screen
 extern const ColorType BLACK       ; // Black
@@ -94,7 +95,7 @@ extern const ColorType LIGHTBLUE   ; // Light blue
 extern const ColorType LIGHTMAGENTA; // Light magenta / light purple
 extern const ColorType LIGHTCYAN   ; // Light cyan
 extern const ColorType WHITE       ; // White (bright)
-
+#endif
 }
 }
 
