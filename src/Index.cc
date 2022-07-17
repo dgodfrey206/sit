@@ -191,3 +191,4 @@ IndexBase GetIndex(const std::string &id)
 
 }
 }
+
